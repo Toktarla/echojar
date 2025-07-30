@@ -1,0 +1,118 @@
+{
+  "_note1": "KEEP THIS FILE! Check it into a version control system (VCS) like git.",
+  "_note2": "ObjectBox manages crucial IDs for your object model. See docs for details.",
+  "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
+  "entities": [
+    {
+      "id": "1:1732983208189280901",
+      "lastPropertyId": "11:3664242703580465476",
+      "name": "Jar",
+      "properties": [
+        {
+          "id": "1:8315529474357073857",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:4791673412544287777",
+          "name": "name",
+          "type": 9
+        },
+        {
+          "id": "3:5063418763273654742",
+          "name": "theme",
+          "type": 9
+        },
+        {
+          "id": "4:4353084585207398683",
+          "name": "isLocked",
+          "type": 1
+        },
+        {
+          "id": "6:3551025198763355352",
+          "name": "note",
+          "type": 9
+        },
+        {
+          "id": "7:8735383565382568915",
+          "name": "emoji",
+          "type": 9
+        },
+        {
+          "id": "8:6851627490893699667",
+          "name": "isArchived",
+          "type": 1
+        },
+        {
+          "id": "9:5639209742729621128",
+          "name": "createdAt",
+          "type": 10
+        },
+        {
+          "id": "10:1100502235640319617",
+          "name": "scheduledAt",
+          "type": 10
+        },
+        {
+          "id": "11:3664242703580465476",
+          "name": "isNotificationEnabled",
+          "type": 1
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "2:7616063930354215653",
+      "lastPropertyId": "7:6350304796109429172",
+      "name": "Memo",
+      "properties": [
+        {
+          "id": "1:7980178000989585684",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:6099582189886061875",
+          "name": "title",
+          "type": 9
+        },
+        {
+          "id": "3:5764510253637858813",
+          "name": "filePath",
+          "type": 9
+        },
+        {
+          "id": "6:2576622707202833672",
+          "name": "jarId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "1:5271724769785805431",
+          "relationTarget": "Jar"
+        },
+        {
+          "id": "7:6350304796109429172",
+          "name": "color",
+          "type": 9
+        }
+      ],
+      "relations": []
+    }
+  ],
+  "lastEntityId": "2:7616063930354215653",
+  "lastIndexId": "1:5271724769785805431",
+  "lastRelationId": "0:0",
+  "lastSequenceId": "0:0",
+  "modelVersion": 5,
+  "modelVersionParserMinimum": 5,
+  "retiredEntityUids": [],
+  "retiredIndexUids": [],
+  "retiredPropertyUids": [
+    4958869616909427412,
+    7291624213964461490,
+    8663262983515949686
+  ],
+  "retiredRelationUids": [],
+  "version": 1
+}
