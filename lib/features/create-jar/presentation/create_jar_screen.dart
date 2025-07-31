@@ -5,6 +5,7 @@ import 'package:echojar/app/database/src/storage/schemes/memo.dart';
 import 'package:echojar/app/theme/app_colors.dart';
 import 'package:echojar/common/presentation/widgets/emoji_picker.dart';
 import 'package:echojar/common/presentation/widgets/error_dialog.dart';
+import 'package:echojar/common/presentation/widgets/jar_theme_tile.dart';
 import 'package:echojar/common/services/audio_recorder_service.dart';
 import 'package:echojar/common/utils/extensions/color_extension.dart';
 import 'package:echojar/common/utils/toaster.dart';
@@ -119,7 +120,7 @@ class _CreateJarScreenState extends State<CreateJarScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Create New Jar')),
+      appBar: AppBar(title: Text('Create New Jar', style: Theme.of(context).textTheme.headlineLarge,)),
       body: SingleChildScrollView(
         padding: EdgeInsets.only(
           left: 20,
@@ -149,18 +150,13 @@ class _CreateJarScreenState extends State<CreateJarScreen> {
                 _buildLabeledField(
                   label: 'Theme',
                   child: Wrap(
-                    spacing: 10,
-                    runSpacing: 8,
+                    spacing: 12,
+                    runSpacing: 12,
                     children: List.generate(themes.length, (i) {
-                      return ChoiceChip(
-                        selectedColor: AppColors.primary,
-                        backgroundColor: AppColors.primaryLight,
-                        label: Text(
-                          themes[i],
-                          style: Theme.of(context).textTheme.titleMedium,
-                        ),
-                        selected: _selectedTheme == i,
-                        onSelected: (_) => setState(() => _selectedTheme = i),
+                      return JarThemeTile(
+                        themeName: themes[i],
+                        isSelected: _selectedTheme == i,
+                        onTap: () => setState(() => _selectedTheme = i),
                       );
                     }),
                   ),

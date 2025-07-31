@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-const List<String> themes = ['Glass', 'Wooden', 'Minimalist', 'Cosmic'];
+const List<String> themes = ['Glass', 'Wooden', 'Minimalist', 'Cosmic', 'Crystal'];
 
 const List<Color> availableColors = [
   Color(0xFFFFCDD2), // Light Red
@@ -23,3 +23,11 @@ const checkPointBodyMessages = [
   'Just a little longer until this memory opens',
   'Your scheduled memory is now available',
 ];
+
+const String recipientEmail = 'toktarsultan4@gmail.com';
+const String shareAppText = '''
+EchoJar helps me save voice memories for later. Thought you might like it too.
+
+Try it: https://your.app.link
+''';
+const String appUrl = 'appurl';

@@ -94,7 +94,7 @@ class _JarDetailScreenState extends State<JarDetailScreen> {
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
         child: Column(
-          spacing: 32,
+          spacing: 24,
           children: [
             if (isReadyToArchive) _buildArchiveBanner(context),
             _buildJarHeader(context),
@@ -110,49 +110,54 @@ class _JarDetailScreenState extends State<JarDetailScreen> {
     return DecoratedBox(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
-        color: AppColors.primaryLight.withValues(alpha: 0.1),
+        color: AppColors.primaryLight,
       ),
       child: Row(
-        spacing: 16,
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(widget.jar.emoji, style: const TextStyle(fontSize: 48)),
+          SizedBox(
+            height: 135,
+            width: 135,
+            child: Image.asset(
+              'assets/icon/jar_${widget.jar.theme.toLowerCase()}.png',
+            ),
+          ),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  widget.jar.name,
-                  style: Theme.of(context).textTheme.headlineMedium,
+                Row(
+                  spacing: 8,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                        color: AppColors.primaryLight,
+                        border: Border.all(color: AppColors.textSecondary, width: 2),
+                      ),
+                      child: Text(widget.jar.emoji,
+                          style: const TextStyle(fontSize: 28)),
+                    ),
+                    Flexible(
+                      child: Text(
+                        widget.jar.name,
+                        style: Theme.of(context).textTheme.titleLarge,
+                        maxLines: 3,
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: 10),
                 Text(
                   '${DateFormat('dd MMM yyyy').format(widget.jar.createdAt)} — ${DateFormat('dd MMM yyyy').format(widget.jar.scheduledAt)}',
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
                 const SizedBox(height: 10),
-                if (widget.jar.note != null && widget.jar.note != '')
-                  ...[
-                    Text(
-                      'Note: ${widget.jar.note}',
-                      style: Theme.of(context).textTheme.bodyLarge,
-                    ),
-                    const SizedBox(height: 10),
-                  ],
-                Row(
-                  children: [
-                    Icon(
-                      widget.jar.isLocked ? Icons.lock : Icons.lock_open,
-                      size: 18,
-                      color: AppColors.textSecondary,
-                    ),
-                    const SizedBox(width: 6),
-                    Text(
-                      widget.jar.isLocked ? 'Locked' : 'Unlocked',
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                  ],
-                ),
+                if (widget.jar.note != null && widget.jar.note != '') ...[
+                  Text(
+                    'Note: ${widget.jar.note}',
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                ],
               ],
             ),
           ),
@@ -165,7 +170,6 @@ class _JarDetailScreenState extends State<JarDetailScreen> {
     return DecoratedBox(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
-        color: AppColors.primaryLight.withValues(alpha: 0.08),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -35,7 +35,6 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        centerTitle: true,
         title: Text(
           'EchoJar',
           style: Theme.of(context).textTheme.headlineLarge,
@@ -108,45 +107,81 @@ class _JarCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double progress = jarNotifier.getProgressForJar(jar);
+    int percentage = (progress * 100).round();
+
     return Card(
-      elevation: 4,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      elevation: 4,
       color: AppColors.surface,
       child: InkWell(
         borderRadius: BorderRadius.circular(16),
-        onTap: () async {
+        onTap: () {
           if (jar.isLocked) {
             UnlockJarDialog.show(context, jar);
           } else {
             JarDetailRoute($extra: jar).push(context);
           }
         },
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Text(jar.emoji, style: const TextStyle(fontSize: 40)),
-              Text(
-                jar.name,
-                style: Theme.of(context).textTheme.titleLarge,
-                textAlign: TextAlign.center,
+        child: Stack(
+          children: [
+            Opacity(
+              opacity: 0.15,
+              child: Image.asset(
+                'assets/icon/jar_${jar.theme.toLowerCase()}.png',
+                height: double.infinity,
+                width: double.infinity,
+                fit: BoxFit.cover,
               ),
-              const SizedBox(height: 8),
-              LinearProgressIndicator(
-                value: jarNotifier.getProgressForJar(jar),
-                minHeight: 8,
-                backgroundColor: AppColors.border,
-                color: AppColors.primary,
-                borderRadius: BorderRadius.circular(4),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16),
+              child: Column(
+                children: [
+                  Text(jar.emoji, style: const TextStyle(fontSize: 40)),
+                  const SizedBox(height: 8),
+                  Flexible(
+                    child: Text(
+                      jar.name,
+                      style: Theme.of(context).textTheme.headlineSmall,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: LinearProgressIndicator(
+                          value: progress,
+                          minHeight: 20,
+                          backgroundColor: AppColors.border,
+                          color: AppColors.primary,
+                        ),
+                      ),
+                      Text(
+                        '$percentage%',
+                        style: Theme.of(context)
+                            .textTheme
+                            .labelSmall,
+                      ),
+                    ],
+                  ),
+                ],
               ),
-              const SizedBox(height: 8),
-              Icon(
+            ),
+
+            Positioned(
+              top: 12,
+              right: 12,
+              child: Icon(
                 jar.isLocked ? Icons.lock : Icons.lock_open,
-                color: AppColors.textSecondary,
+                size: 18,
+                color: AppColors.textPrimary,
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

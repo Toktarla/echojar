@@ -15,25 +15,101 @@ final appTheme = ThemeData(
   ),
   cardColor: AppColors.surface,
   dividerColor: AppColors.border,
+  inputDecorationTheme: InputDecorationTheme(
+    border: const OutlineInputBorder(),
+    enabledBorder: const OutlineInputBorder(),
+    focusedBorder: const OutlineInputBorder(),
+    errorBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(12),
+      borderSide: BorderSide(color: Colors.red.shade400),
+    ),
+    focusedErrorBorder: const OutlineInputBorder(),
+    labelStyle: const TextStyle(
+      color: AppColors.textPrimary,
+      fontSize: 16,
+      fontFamily: 'Nunito',
+    ),
+    hintStyle: const TextStyle(
+      color: AppColors.textSecondary,
+      fontSize: 14,
+      fontFamily: 'Nunito',
+    ),
+    errorStyle: const TextStyle(
+      color: Colors.red,
+      fontSize: 12,
+      fontFamily: 'Nunito',
+    ),
+    iconColor: AppColors.primary,
+    suffixIconColor: AppColors.textSecondary,
+    prefixIconColor: AppColors.textSecondary,
+  ),
+  textSelectionTheme: TextSelectionThemeData(
+    cursorColor: AppColors.primary,
+    selectionColor: AppColors.primary,
+  ),
   iconTheme: const IconThemeData(color: AppColors.textPrimary),
   textTheme: const TextTheme(
-    displayLarge: TextStyle(fontSize: 36, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
-    displayMedium: TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
-    displaySmall: TextStyle(fontSize: 28, fontWeight: FontWeight.w600, color: AppColors.textPrimary),
-
-    headlineLarge: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
-    headlineMedium: TextStyle(fontSize: 22, fontWeight: FontWeight.w600, color: AppColors.textPrimary),
-    headlineSmall: TextStyle(fontSize: 20, fontWeight: FontWeight.w500, color: AppColors.textPrimary),
-
-    titleLarge: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
-    titleMedium: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: AppColors.textPrimary),
-    titleSmall: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: AppColors.textSecondary),
-
-    bodyLarge: TextStyle(fontSize: 16, fontWeight: FontWeight.normal, color: AppColors.textPrimary),
-    bodyMedium: TextStyle(fontSize: 14, fontWeight: FontWeight.normal, color: AppColors.textPrimary),
-    bodySmall: TextStyle(fontSize: 12, fontWeight: FontWeight.normal, color: AppColors.textSecondary),
+    displayLarge: TextStyle(
+        fontSize: 36,
+        fontWeight: FontWeight.bold,
+        color: AppColors.textPrimary,
+        fontFamily: 'Nunito'),
+    displayMedium: TextStyle(
+        fontSize: 32,
+        fontWeight: FontWeight.bold,
+        color: AppColors.textPrimary,
+        fontFamily: 'Nunito'),
+    displaySmall: TextStyle(
+        fontSize: 28,
+        fontWeight: FontWeight.w600,
+        color: AppColors.textPrimary,
+        fontFamily: 'Nunito'),
+    headlineLarge: TextStyle(
+        fontSize: 24,
+        fontWeight: FontWeight.bold,
+        color: AppColors.textPrimary,
+        fontFamily: 'Nunito'),
+    headlineMedium: TextStyle(
+        fontSize: 22,
+        fontWeight: FontWeight.w600,
+        color: AppColors.textPrimary,
+        fontFamily: 'Nunito'),
+    headlineSmall: TextStyle(
+        fontSize: 20,
+        fontWeight: FontWeight.w500,
+        color: AppColors.textPrimary,
+        fontFamily: 'Nunito'),
+    titleLarge: TextStyle(
+        fontSize: 18,
+        fontWeight: FontWeight.bold,
+        color: AppColors.textPrimary,
+        fontFamily: 'Nunito'),
+    titleMedium: TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.w600,
+        color: AppColors.textPrimary,
+        fontFamily: 'Nunito'),
+    titleSmall: TextStyle(
+        fontSize: 14,
+        fontWeight: FontWeight.w500,
+        color: AppColors.textSecondary,
+        fontFamily: 'Nunito'),
+    bodyLarge: TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.normal,
+        color: AppColors.textPrimary,
+        fontFamily: 'Nunito'),
+    bodyMedium: TextStyle(
+        fontSize: 14,
+        fontWeight: FontWeight.normal,
+        color: AppColors.textPrimary,
+        fontFamily: 'Nunito'),
+    bodySmall: TextStyle(
+        fontSize: 12,
+        fontWeight: FontWeight.normal,
+        color: AppColors.textSecondary,
+        fontFamily: 'Nunito'),
   ),
-
   bottomNavigationBarTheme: const BottomNavigationBarThemeData(
     backgroundColor: AppColors.surface,
     selectedItemColor: AppColors.primary,
@@ -42,25 +118,25 @@ final appTheme = ThemeData(
     showUnselectedLabels: true,
     type: BottomNavigationBarType.fixed,
   ),
-
   switchTheme: SwitchThemeData(
     thumbColor: WidgetStateProperty.all(AppColors.primary),
     trackColor: WidgetStateProperty.all(AppColors.primaryLight),
   ),
-
   elevatedButtonTheme: ElevatedButtonThemeData(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: AppColors.primaryLight,
-        textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: AppColors.background),
-        elevation: 0,
-        iconColor: AppColors.textPrimary,
-      ),
+    style: ElevatedButton.styleFrom(
+      backgroundColor: AppColors.primaryLight,
+      textStyle: TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.w600,
+          color: AppColors.background,
+          fontFamily: 'Nunito'),
+      elevation: 0,
+      iconColor: AppColors.textPrimary,
+    ),
   ),
-
   drawerTheme: const DrawerThemeData(
     backgroundColor: AppColors.surface,
   ),
-
   cardTheme: const CardTheme(
     elevation: 2,
     margin: EdgeInsets.all(8),
@@ -68,34 +144,30 @@ final appTheme = ThemeData(
       borderRadius: BorderRadius.all(Radius.circular(12)),
     ),
   ),
-
   dialogTheme: const DialogTheme(
     backgroundColor: AppColors.surface,
     titleTextStyle: TextStyle(
-      fontSize: 20,
-      fontWeight: FontWeight.bold,
-      color: AppColors.textPrimary,
-    ),
+        fontSize: 20,
+        fontWeight: FontWeight.bold,
+        color: AppColors.textPrimary,
+        fontFamily: 'Nunito'),
     contentTextStyle: TextStyle(
-      fontSize: 16,
-      color: AppColors.textPrimary,
-    ),
+        fontSize: 16, color: AppColors.textPrimary, fontFamily: 'Nunito'),
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.all(Radius.circular(16)),
     ),
   ),
-
   appBarTheme: AppBarTheme(
     backgroundColor: AppColors.surface,
     elevation: 0,
+    centerTitle: true,
     iconTheme: IconThemeData(color: Colors.black),
     titleTextStyle: TextStyle(
-      color: AppColors.textPrimary,
-      fontSize: 20,
-      fontWeight: FontWeight.bold,
-    ),
+        color: AppColors.textPrimary,
+        fontSize: 20,
+        fontWeight: FontWeight.bold,
+        fontFamily: 'Nunito'),
   ),
-
   datePickerTheme: DatePickerThemeData(
     backgroundColor: AppColors.surface,
     elevation: 4,
@@ -107,39 +179,38 @@ final appTheme = ThemeData(
     headerBackgroundColor: AppColors.primary,
     headerForegroundColor: Colors.white,
     headerHeadlineStyle: const TextStyle(
-      fontSize: 20,
-      fontWeight: FontWeight.bold,
-      color: Colors.white,
-    ),
+        fontSize: 20,
+        fontWeight: FontWeight.bold,
+        color: Colors.white,
+        fontFamily: 'Nunito'),
     headerHelpStyle: const TextStyle(
-      fontSize: 14,
-      fontWeight: FontWeight.w500,
-      color: Colors.white70,
-    ),
+        fontSize: 14,
+        fontWeight: FontWeight.w500,
+        color: Colors.white70,
+        fontFamily: 'Nunito'),
 
     // Year/month picker
     yearStyle: TextStyle(
-      color: AppColors.textPrimary,
-      fontSize: 16,
-      fontWeight: FontWeight.w500,
-    ),
-    yearForegroundColor: MaterialStateProperty.resolveWith<Color?>((states) {
-      if (states.contains(MaterialState.selected)) return Colors.white;
+        color: AppColors.textPrimary,
+        fontSize: 16,
+        fontWeight: FontWeight.w500,
+        fontFamily: 'Nunito'),
+    yearForegroundColor: WidgetStateProperty.resolveWith<Color?>((states) {
+      if (states.contains(WidgetState.selected)) return Colors.white;
       return AppColors.textSecondary;
     }),
-    yearBackgroundColor: MaterialStateProperty.resolveWith<Color?>((states) {
-      if (states.contains(MaterialState.selected)) return AppColors.primary;
+    yearBackgroundColor: WidgetStateProperty.resolveWith<Color?>((states) {
+      if (states.contains(WidgetState.selected)) return AppColors.primary;
       return Colors.transparent;
     }),
 
     // Day picker
     dayStyle: TextStyle(
-      fontSize: 14,
-      color: AppColors.textPrimary,
-    ),
+        fontSize: 14, color: AppColors.textPrimary, fontFamily: 'Nunito'),
     dayForegroundColor: WidgetStateProperty.resolveWith<Color?>((states) {
       if (states.contains(WidgetState.selected)) return Colors.white;
-      if (states.contains(WidgetState.disabled)) return AppColors.textSecondary.withOpacity(0.3);
+      if (states.contains(WidgetState.disabled))
+        return AppColors.textSecondary.withValues(alpha: 0.3);
       return AppColors.textPrimary;
     }),
     dayBackgroundColor: WidgetStateProperty.resolveWith<Color?>((states) {
@@ -154,11 +225,13 @@ final appTheme = ThemeData(
     // Dialog action buttons
     cancelButtonStyle: TextButton.styleFrom(
       foregroundColor: AppColors.textSecondary,
-      textStyle: const TextStyle(fontWeight: FontWeight.w500),
+      textStyle:
+          const TextStyle(fontWeight: FontWeight.w500, fontFamily: 'Nunito'),
     ),
     confirmButtonStyle: TextButton.styleFrom(
       foregroundColor: AppColors.primary,
-      textStyle: const TextStyle(fontWeight: FontWeight.bold),
+      textStyle:
+          const TextStyle(fontWeight: FontWeight.bold, fontFamily: 'Nunito'),
     ),
   ),
 );

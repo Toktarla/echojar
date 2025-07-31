@@ -1,7 +1,4 @@
-import 'dart:ui';
-
 import 'package:echojar/app/database/src/storage/schemes/jar.dart';
-import 'package:echojar/app/theme/app_colors.dart';
 import 'package:objectbox/objectbox.dart';
 
 @Entity()

@@ -19,6 +19,12 @@ part of 'router.dart';
     TypedGoRoute<SettingsRoute>(
       path: '/settings',
       name: 'Settings',
+      routes: [
+        TypedGoRoute<FeedbackRoute>(
+          path: 'feedback',
+          name: 'Feedback',
+        ),
+      ]
     ),
     TypedGoRoute<CreateJarRoute>(
       path: '/create',
@@ -76,6 +82,13 @@ class SettingsRoute extends GoRouteData {
 
   @override
   Widget build(BuildContext context, GoRouterState state) => const SettingsScreen();
+}
+
+class FeedbackRoute extends GoRouteData {
+  const FeedbackRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) => const FeedbackScreen();
 }
 
 class CreateJarRoute extends GoRouteData {

@@ -93,11 +93,11 @@ class _CreateMemoDialogState extends State<CreateMemoDialog> {
 
     return ConstrainedBox(
       constraints: BoxConstraints(
-        maxHeight: size.height * 0.9,
-        maxWidth: size.width * 0.95,
+        maxHeight: size.height * 0.8,
+        maxWidth: size.width * 0.9,
       ),
       child: Padding(
-        padding: const EdgeInsets.all(24.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [

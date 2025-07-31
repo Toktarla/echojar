@@ -36,6 +36,13 @@ RouteBase get $rootShellRouteData => ShellRouteData.$route(
           path: '/settings',
           name: 'Settings',
           factory: $SettingsRouteExtension._fromState,
+          routes: [
+            GoRouteData.$route(
+              path: 'feedback',
+              name: 'Feedback',
+              factory: $FeedbackRouteExtension._fromState,
+            ),
+          ],
         ),
         GoRouteData.$route(
           path: '/create',
@@ -110,6 +117,23 @@ extension $SettingsRouteExtension on SettingsRoute {
 
   String get location => GoRouteData.$location(
         '/settings',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $FeedbackRouteExtension on FeedbackRoute {
+  static FeedbackRoute _fromState(GoRouterState state) => const FeedbackRoute();
+
+  String get location => GoRouteData.$location(
+        '/settings/feedback',
       );
 
   void go(BuildContext context) => context.go(location);

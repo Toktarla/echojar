@@ -67,7 +67,7 @@ class LocalNotificationService {
         await _notificationsPlugin.show(
           id,
           title,
-          'Ты уже прошёл ${checkpoint * 100}% пути. Продолжай держаться!',
+          'You have already completed ${checkpoint * 100}% of the journey!',
           notificationDetails,
         );
       } else {
@@ -86,7 +86,7 @@ class LocalNotificationService {
 
     // Если все прошли — показать тост
     if (allCheckpointsPassed && context.mounted) {
-      Toaster.showSuccessToast(context, title: 'Эта банка уже открылась 🎉');
+      Toaster.showSuccessToast(context, title: 'This jar has already been opened 🎉');
     }
   }
 

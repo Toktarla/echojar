@@ -149,23 +149,6 @@ class _LanguageSelector extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const _FieldTitle("Language"),
-        Row(
-          children: [
-            ChoiceChip(
-              label: const Text("English"),
-              selected: selected == 'en',
-              selectedColor: AppColors.primaryLight,
-              onSelected: (_) => onSelect('en'),
-            ),
-            const SizedBox(width: 12),
-            ChoiceChip(
-              label: const Text("Русский"),
-              selected: selected == 'ru',
-              selectedColor: AppColors.primaryLight,
-              onSelected: (_) => onSelect('ru'),
-            ),
-          ],
-        ),
       ],
     );
   }

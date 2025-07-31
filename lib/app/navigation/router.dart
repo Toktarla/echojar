@@ -6,6 +6,7 @@ import 'package:echojar/features/home/jar_detail_screen.dart';
 import 'package:echojar/features/home/home_screen.dart';
 import 'package:echojar/features/onboarding/onboarding_screen.dart';
 import 'package:echojar/features/root/root_screen.dart';
+import 'package:echojar/features/settings/feedback_screen.dart';
 import 'package:echojar/features/settings/settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';

@@ -2,6 +2,9 @@ import 'package:echojar/app/database/src/storage/schemes/jar.dart';
 import 'package:echojar/app/navigation/router.dart';
 import 'package:echojar/app/theme/app_colors.dart';
 import 'package:echojar/common/presentation/widgets/emoji_picker.dart';
+import 'package:echojar/common/presentation/widgets/jar_theme_tile.dart';
+import 'package:echojar/common/services/local_notification_service.dart';
+import 'package:echojar/common/utils/toaster.dart';
 import 'package:echojar/data/data.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -10,7 +13,8 @@ class UpdateJarDialog extends StatefulWidget {
   final Jar initialJar;
   final void Function(Jar) onSubmit;
 
-  const UpdateJarDialog({super.key, required this.initialJar, required this.onSubmit});
+  const UpdateJarDialog(
+      {super.key, required this.initialJar, required this.onSubmit});
 
   static Future<Jar?> show(BuildContext context,
       {required Jar initialJar, required void Function(Jar) onSubmit}) {
@@ -41,6 +45,7 @@ class _UpdateJarDialogState extends State<UpdateJarDialog> {
   late String _selectedEmoji;
   late bool isLocked;
   late bool isArchived;
+  late bool isNotificationEnabled;
   DateTime? scheduledDate;
 
   @override
@@ -54,14 +59,14 @@ class _UpdateJarDialogState extends State<UpdateJarDialog> {
     _selectedEmoji = jar.emoji;
     isLocked = jar.isLocked;
     isArchived = jar.isArchived;
+    isNotificationEnabled = jar.isNotificationEnabled;
     scheduledDate = jar.scheduledAt;
   }
 
-  @override
-  void dispose() {
-    nameController.dispose();
-    noteController.dispose();
-    super.dispose();
+  bool _isDateInPast() {
+    final now = DateTime.now();
+    final dateToCheck = scheduledDate ?? widget.initialJar.scheduledAt;
+    return dateToCheck.isBefore(now);
   }
 
   void _submit() {
@@ -73,6 +78,7 @@ class _UpdateJarDialogState extends State<UpdateJarDialog> {
       isLocked: isLocked,
       isArchived: isArchived,
       createdAt: widget.initialJar.createdAt,
+      isNotificationEnabled: isNotificationEnabled,
       scheduledAt: scheduledDate ?? widget.initialJar.scheduledAt,
     )..id = widget.initialJar.id;
 
@@ -101,9 +107,12 @@ class _UpdateJarDialogState extends State<UpdateJarDialog> {
       child: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Update Jar', style: textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold)),
-            const SizedBox(height: 16),
+            Text('Update Jar',
+                style: textTheme.titleLarge
+                    ?.copyWith(fontWeight: FontWeight.bold)),
+            const SizedBox(height: 12),
             _buildTextField(nameController, 'Name', Icons.label),
             const SizedBox(height: 12),
             _buildLabeledField(
@@ -112,12 +121,10 @@ class _UpdateJarDialogState extends State<UpdateJarDialog> {
                 spacing: 10,
                 runSpacing: 8,
                 children: List.generate(themes.length, (i) {
-                  return ChoiceChip(
-                    selectedColor: AppColors.primary,
-                    backgroundColor: AppColors.primaryLight,
-                    label: Text(themes[i], style: theme.textTheme.titleMedium),
-                    selected: _selectedThemeIndex == i,
-                    onSelected: (_) => setState(() => _selectedThemeIndex = i),
+                  return JarThemeTile(
+                    themeName: themes[i],
+                    isSelected: _selectedThemeIndex == i,
+                    onTap: () => setState(() => _selectedThemeIndex = i),
                   );
                 }),
               ),
@@ -134,7 +141,8 @@ class _UpdateJarDialogState extends State<UpdateJarDialog> {
                 },
                 borderRadius: BorderRadius.circular(12),
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   decoration: BoxDecoration(
                     color: AppColors.primaryLight,
                     borderRadius: BorderRadius.circular(12),
@@ -143,11 +151,14 @@ class _UpdateJarDialogState extends State<UpdateJarDialog> {
                   child: Row(
                     children: [
                       Text(
-                        _selectedEmoji.isNotEmpty ? _selectedEmoji : 'Select an emoji',
+                        _selectedEmoji.isNotEmpty
+                            ? _selectedEmoji
+                            : 'Select an emoji',
                         style: textTheme.titleMedium,
                       ),
                       const Spacer(),
-                      const Icon(Icons.emoji_emotions_outlined, color: AppColors.primary),
+                      const Icon(Icons.emoji_emotions_outlined,
+                          color: AppColors.primary),
                     ],
                   ),
                 ),
@@ -156,42 +167,71 @@ class _UpdateJarDialogState extends State<UpdateJarDialog> {
             const SizedBox(height: 12),
             _buildTextField(noteController, 'Note', Icons.note, maxLines: 2),
             const SizedBox(height: 8),
-            SwitchListTile(
-              contentPadding: EdgeInsets.zero,
-              title: const Text('Locked'),
-              value: isLocked,
-              onChanged: (value) => setState(() => isLocked = value),
-            ),
-            const SizedBox(height: 8),
-            SwitchListTile(
-              contentPadding: EdgeInsets.zero,
-              title: const Text('Archived'),
-              value: isArchived,
-              onChanged: (value) => setState(() => isArchived = value),
-            ),
-            const SizedBox(height: 8),
-            ListTile(
-              contentPadding: EdgeInsets.zero,
-              title: const Text('Scheduled Date'),
-              subtitle: Text(
-                scheduledDate != null
-                    ? DateFormat.yMMMMd().format(scheduledDate!)
-                    : 'No date selected',
-                style: textTheme.bodyMedium,
+            if (!_isDateInPast()) ...[
+              SwitchListTile(
+                contentPadding: EdgeInsets.zero,
+                title: const Text('Locked'),
+                value: isLocked,
+                onChanged: (value) => setState(() => isLocked = value),
               ),
-              trailing: const Icon(Icons.calendar_today),
-              onTap: () async {
-                final picked = await showDatePicker(
-                  context: context,
-                  firstDate: DateTime.now(),
-                  lastDate: DateTime.now().add(const Duration(days: 365 * 5)),
-                  initialDate: scheduledDate ?? DateTime.now(),
-                );
-                if (picked != null) {
-                  setState(() => scheduledDate = picked);
-                }
-              },
-            ),
+              const SizedBox(height: 8),
+              SwitchListTile(
+                contentPadding: EdgeInsets.zero,
+                title: const Text('Archived'),
+                value: isArchived,
+                onChanged: (value) {
+                  setState(() {
+                    isArchived = value;
+                  });
+                  if (isArchived) {
+                    isNotificationEnabled = false;
+                    LocalNotificationService.cancelProgressNotifications(
+                        scheduledDate ?? widget.initialJar.scheduledAt);
+                  }
+                },
+              ),
+              const SizedBox(height: 8),
+              ListTile(
+                contentPadding: EdgeInsets.zero,
+                title: const Text('Scheduled Date'),
+                subtitle: Text(
+                  scheduledDate != null
+                      ? DateFormat.yMMMMd().format(scheduledDate!)
+                      : 'No date selected',
+                  style: textTheme.bodyMedium,
+                ),
+                trailing: const Icon(Icons.calendar_today),
+                onTap: () async {
+                  final picked = await showDatePicker(
+                    context: context,
+                    firstDate: DateTime.now(),
+                    lastDate: DateTime.now().add(const Duration(days: 365 * 5)),
+                    initialDate: scheduledDate ?? DateTime.now(),
+                  );
+
+                  if (picked != null && picked != scheduledDate) {
+                    setState(() => scheduledDate = picked);
+                    if (isNotificationEnabled) {
+                      LocalNotificationService.cancelProgressNotifications(
+                          scheduledDate ??
+                              scheduledDate ??
+                              widget.initialJar.scheduledAt);
+                      LocalNotificationService.scheduleProgressNotifications(
+                          createdDate: widget.initialJar.createdAt,
+                          scheduledDate:
+                              scheduledDate ?? widget.initialJar.scheduledAt,
+                          title: nameController.text.isNotEmpty
+                              ? nameController.text
+                              : widget.initialJar.name,
+                          context: context);
+                      Toaster.showSuccessToast(context,
+                          title:
+                              'Notifications were rescheduled to this date: ${scheduledDate ?? widget.initialJar.scheduledAt}');
+                    }
+                  }
+                },
+              ),
+            ],
             const SizedBox(height: 16),
             Row(
               children: [
@@ -201,7 +241,8 @@ class _UpdateJarDialogState extends State<UpdateJarDialog> {
                     style: OutlinedButton.styleFrom(
                       foregroundColor: theme.colorScheme.onSurface,
                       side: BorderSide(color: theme.dividerColor),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12)),
                     ),
                     child: const Text('Cancel'),
                   ),
@@ -211,7 +252,8 @@ class _UpdateJarDialogState extends State<UpdateJarDialog> {
                   child: ElevatedButton(
                     onPressed: _submit,
                     style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12)),
                     ),
                     child: Text('Update', style: textTheme.titleLarge),
                   ),
@@ -224,7 +266,9 @@ class _UpdateJarDialogState extends State<UpdateJarDialog> {
     );
   }
 
-  Widget _buildTextField(TextEditingController controller, String label, IconData icon, {int maxLines = 1}) {
+  Widget _buildTextField(
+      TextEditingController controller, String label, IconData icon,
+      {int maxLines = 1}) {
     return TextField(
       controller: controller,
       maxLines: maxLines,
@@ -245,5 +289,12 @@ class _UpdateJarDialogState extends State<UpdateJarDialog> {
         child,
       ],
     );
+  }
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    noteController.dispose();
+    super.dispose();
   }
 }
