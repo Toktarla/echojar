@@ -113,7 +113,8 @@ class _UpdateJarDialogState extends State<UpdateJarDialog> {
                 style: textTheme.titleLarge
                     ?.copyWith(fontWeight: FontWeight.bold)),
             const SizedBox(height: 12),
-            _buildTextField(nameController, 'Name', Icons.label),
+            _buildTextField(
+                controller: nameController, label: 'Name', icon: Icons.label),
             const SizedBox(height: 12),
             _buildLabeledField(
               label: 'Theme',
@@ -165,7 +166,15 @@ class _UpdateJarDialogState extends State<UpdateJarDialog> {
               ),
             ),
             const SizedBox(height: 12),
-            _buildTextField(noteController, 'Note', Icons.note, maxLines: 2),
+            _buildLabeledField(
+              label: 'Note',
+              child: _buildTextField(
+                  controller: noteController,
+                  label: 'Note',
+                  icon: Icons.note,
+                  maxLines: 2
+              ),
+            ),
             const SizedBox(height: 8),
             if (!_isDateInPast()) ...[
               SwitchListTile(
@@ -267,8 +276,10 @@ class _UpdateJarDialogState extends State<UpdateJarDialog> {
   }
 
   Widget _buildTextField(
-      TextEditingController controller, String label, IconData icon,
-      {int maxLines = 1}) {
+      {required TextEditingController controller,
+      required IconData icon,
+      String? label,
+      int maxLines = 1}) {
     return TextField(
       controller: controller,
       maxLines: maxLines,

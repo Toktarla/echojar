@@ -25,7 +25,12 @@ class AudioRecorderService {
     final dir = await getApplicationDocumentsDirectory();
     _filePath = '${dir.path}/memo_${DateTime.now().millisecondsSinceEpoch}.m4a';
 
-    await _recorder.startRecorder(toFile: _filePath, codec: Codec.aacMP4);
+    await _recorder.startRecorder(
+      toFile: _filePath,
+      codec: Codec.aacMP4,
+      bitRate: 96000,
+      sampleRate: 44100,
+    );
     _isRecording = true;
   }
 

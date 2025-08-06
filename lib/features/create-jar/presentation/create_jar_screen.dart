@@ -39,7 +39,6 @@ class _CreateJarScreenState extends State<CreateJarScreen> {
 
   bool get isFormValid =>
       _jarNameController.text.trim().isNotEmpty ||
-      _memoNameController.text.isNotEmpty ||
       _selectedEmoji != '' ||
       _scheduledAt != null || _recorderService.recordedFilePath != null;
 
@@ -354,7 +353,17 @@ class _CreateJarScreenState extends State<CreateJarScreen> {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: !_isSaving || isFormValid ? _createJar : null,
+                onPressed: !_isSaving || isFormValid ? _createJar : () => Toaster.showErrorToast(context, title: 'Fill all required fields'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: !_isSaving && !isFormValid
+                      ? Colors.grey.shade400
+                      : AppColors.primaryLight,
+                  foregroundColor: !_isSaving && !isFormValid
+                      ? Colors.grey.shade800
+                      : Theme.of(context).colorScheme.onPrimary,
+                  disabledBackgroundColor: Colors.grey.shade400,
+                  disabledForegroundColor: Colors.grey.shade800,
+                ),
                 child: _isSaving
                     ? const SizedBox(
                         height: 20,

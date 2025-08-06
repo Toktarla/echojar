@@ -31,13 +31,11 @@ class JarDetailScreen extends StatefulWidget {
 class _JarDetailScreenState extends State<JarDetailScreen> {
   late AppDatabase _db;
   final now = DateTime.now();
-  late final isReadyToArchive;
 
   @override
   void initState() {
     super.initState();
     _initDb();
-    isReadyToArchive = now.isAfter(widget.jar.scheduledAt);
   }
 
   Future<void> _initDb() async {
@@ -47,6 +45,7 @@ class _JarDetailScreenState extends State<JarDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final jarNotifier = context.watch<JarViewModel>();
+    final isReadyToArchive = now.isAfter(widget.jar.scheduledAt) && !widget.jar.isArchived;
 
     return Scaffold(
       appBar: AppBar(
