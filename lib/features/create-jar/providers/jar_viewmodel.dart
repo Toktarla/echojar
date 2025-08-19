@@ -16,7 +16,7 @@ class JarViewModel extends ChangeNotifier {
   List<Memo> getMemosForJar(int jarId) => _memosByJar[jarId] ?? [];
 
   void refresh(AppDatabase db) {
-    _allJars = db.getAllJars(); // include all jars
+    _allJars = db.getAllJars();
     _refreshAllMemos(db);
     notifyListeners();
   }
@@ -28,7 +28,7 @@ class JarViewModel extends ChangeNotifier {
     }
   }
 
-  void refreshJarMemos(AppDatabase db, int jarId) {
+  void _refreshJarMemos(AppDatabase db, int jarId) {
     _memosByJar[jarId] = db.getMemosForJar(jarId);
     notifyListeners();
   }
@@ -50,17 +50,17 @@ class JarViewModel extends ChangeNotifier {
 
   void addMemo(AppDatabase db, Memo memo, Jar jar) {
     db.addMemo(memo, jar);
-    refreshJarMemos(db, jar.id);
+    _refreshJarMemos(db, jar.id);
   }
 
   void deleteMemo(AppDatabase db, int memoId, int jarId) {
     db.deleteMemo(memoId);
-    refreshJarMemos(db, jarId);
+    _refreshJarMemos(db, jarId);
   }
 
   void updateMemo(AppDatabase db, Memo memo) {
     db.updateMemo(memo);
-    refreshJarMemos(db, memo.jar.target?.id ?? -1);
+    _refreshJarMemos(db, memo.jar.target?.id ?? -1);
   }
 
   double getProgressForJar(Jar jar) {

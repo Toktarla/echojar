@@ -1,6 +1,7 @@
 import 'package:echojar/app/database/src/storage/schemes/jar.dart';
 import 'package:echojar/app/navigation/router.dart';
 import 'package:echojar/app/theme/app_colors.dart';
+import 'package:echojar/common/presentation/widgets/date_selector_bs.dart';
 import 'package:echojar/common/presentation/widgets/emoji_picker.dart';
 import 'package:echojar/common/presentation/widgets/jar_theme_tile.dart';
 import 'package:echojar/common/services/local_notification_service.dart';
@@ -210,34 +211,36 @@ class _UpdateJarDialogState extends State<UpdateJarDialog> {
                   style: textTheme.bodyMedium,
                 ),
                 trailing: const Icon(Icons.calendar_today),
-                onTap: () async {
-                  final picked = await showDatePicker(
-                    context: context,
-                    firstDate: DateTime.now(),
-                    lastDate: DateTime.now().add(const Duration(days: 365 * 5)),
-                    initialDate: scheduledDate ?? DateTime.now(),
-                  );
+                onTap: () {
+                  DateSelectorBS.show(
+                    context,
+                    onDateSelected: (picked) {
+                      if (picked != scheduledDate) {
+                        setState(() => scheduledDate = picked);
 
-                  if (picked != null && picked != scheduledDate) {
-                    setState(() => scheduledDate = picked);
-                    if (isNotificationEnabled) {
-                      LocalNotificationService.cancelProgressNotifications(
-                          scheduledDate ??
-                              scheduledDate ??
-                              widget.initialJar.scheduledAt);
-                      LocalNotificationService.scheduleProgressNotifications(
-                          createdDate: widget.initialJar.createdAt,
-                          scheduledDate:
-                              scheduledDate ?? widget.initialJar.scheduledAt,
-                          title: nameController.text.isNotEmpty
-                              ? nameController.text
-                              : widget.initialJar.name,
-                          context: context);
-                      Toaster.showSuccessToast(context,
-                          title:
-                              'Notifications were rescheduled to this date: ${scheduledDate ?? widget.initialJar.scheduledAt}');
-                    }
-                  }
+                        if (isNotificationEnabled) {
+                          LocalNotificationService.cancelProgressNotifications(
+                            scheduledDate ?? widget.initialJar.scheduledAt,
+                          );
+
+                          LocalNotificationService.scheduleProgressNotifications(
+                            createdDate: widget.initialJar.createdAt,
+                            scheduledDate: scheduledDate ?? widget.initialJar.scheduledAt,
+                            title: nameController.text.isNotEmpty
+                                ? nameController.text
+                                : widget.initialJar.name,
+                            context: context,
+                          );
+
+                          Toaster.showSuccessToast(
+                            context,
+                            title:
+                            'Notifications were rescheduled to this date: ${scheduledDate ?? widget.initialJar.scheduledAt}',
+                          );
+                        }
+                      }
+                    },
+                  );
                 },
               ),
             ],

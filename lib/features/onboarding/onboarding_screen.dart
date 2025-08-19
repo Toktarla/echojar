@@ -1,155 +1,128 @@
-import 'package:echojar/app/navigation/router.dart';
 import 'package:flutter/material.dart';
-import 'package:echojar/app/database/src/preferences/app_config_manager.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:introduction_screen/introduction_screen.dart';
+import 'package:echojar/app/navigation/router.dart';
 import 'package:echojar/app/theme/app_colors.dart';
 
-class OnboardingScreen extends StatefulWidget {
+class OnboardingScreen extends StatelessWidget {
   const OnboardingScreen({super.key});
 
-  @override
-  State<OnboardingScreen> createState() => _OnboardingScreenState();
-}
-
-class _OnboardingScreenState extends State<OnboardingScreen> {
-  final _nameController = TextEditingController();
-
-  String _language = 'en';
-
-  bool get _isFormValid =>
-      _nameController.text.trim().isNotEmpty;
-
-  void _completeOnboarding() async {
-    final config = AppConfigManager();
-    await config.setUserName(_nameController.text.trim());
-    await config.setLanguage(_language);
-    await config.setOnboardingCompleted(true);
-
-    if (!mounted) return;
-    context.goNamed('Home');
+  List<PageViewModel> _buildPages(BuildContext context) {
+    return [
+      PageViewModel(
+        title: "🎙️ Save Your Voice",
+        body: "Say something you want to hear later.\n"
+            "Keep it safe inside your own digital jar.",
+        image: _buildIcon(CupertinoIcons.mic_fill, AppColors.textPrimary),
+        decoration: _pageDecoration(),
+      ),
+      PageViewModel(
+        title: "⏳ Wait for the Right Time",
+        body: "Pick when it will come back to you.\n"
+            "Days, months, or years later — it’s a surprise.",
+        image: _buildIcon(CupertinoIcons.time_solid, AppColors.textPrimary),
+        decoration: _pageDecoration(),
+      ),
+      PageViewModel(
+        title: "✨ Hear It Again",
+        body: "When the day comes, open your jar.\n"
+            "Feel the moment all over again.",
+        image: _buildIcon(CupertinoIcons.play_circle_fill, AppColors.textPrimary),
+        decoration: _pageDecoration(),
+      ),
+    ];
   }
-
-  void _updateState() => setState(() {});
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      canPop: false,
-      child: Scaffold(
-        body: SafeArea(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const _Header(),
-                _FieldTitle("Your Name", isRequired: true),
-                TextField(
-                  controller: _nameController,
-                  onChanged: (_) => _updateState(),
-                  decoration: const InputDecoration(
-                    hintText: "Enter your name",
-                    border: OutlineInputBorder(),
-                    focusColor: AppColors.primaryLight,
-                    focusedBorder: OutlineInputBorder(),
-                  ),
-                ),
-                const SizedBox(height: 12),
-                _LanguageSelector(
-                  selected: _language,
-                  onSelect: (lang) {
-                    _language = lang;
-                    _updateState();
-                  },
-                ),
-                const SizedBox(height: 16),
-                Center(
-                  child: SizedBox(
-                    height: 60,
-                    width: double.infinity,
-                    child: ElevatedButton.icon(
-                      onPressed: _isFormValid ? _completeOnboarding : null,
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12)),
-                        backgroundColor: AppColors.primaryLight,
-                      ),
-                      icon: const Icon(Icons.check, color: Colors.black,),
-                      label: Text("Finish", style: Theme.of(context).textTheme.titleLarge),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+    return IntroductionScreen(
+      globalBackgroundColor: Colors.white,
+      pages: _buildPages(context),
+      onDone: () => context.goNamed('Home'),
+      onSkip: () => context.goNamed('Home'),
+      showSkipButton: true,
+      showBackButton: true,
+      skipOrBackFlex: 1,
+      nextFlex: 1,
+      back: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        decoration: BoxDecoration(
+          color: AppColors.primaryLight,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: const Text(
+          "Prev",
+          style: TextStyle(fontWeight: FontWeight.w600, fontSize: 24, color: Colors.black87),
         ),
       ),
+      skip: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        decoration: BoxDecoration(
+          color: AppColors.primaryLight,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: const Text(
+          "Skip",
+          style: TextStyle(fontWeight: FontWeight.w600, fontSize: 24, color: Colors.black87),
+        ),
+      ),
+      next: Container(
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: AppColors.primaryLight,
+          shape: BoxShape.circle,
+        ),
+        child: Icon(Icons.arrow_forward, color: AppColors.primary, size: 32),
+      ),
+      done: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+        decoration: BoxDecoration(
+          color: AppColors.primaryLight,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: const Text(
+          "Start",
+          style: TextStyle(fontWeight: FontWeight.w600, fontSize: 24, color: Colors.black87),
+        ),
+      ),
+      dotsDecorator: DotsDecorator(
+        size: const Size(10.0, 10.0),
+        color: Colors.grey.shade400,
+        activeSize: const Size(24.0, 10.0),
+        activeColor: AppColors.primaryLight,
+        activeShape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(25.0),
+        ),
+      ),
+      animationDuration: 500,
+      curve: Curves.easeInOut,
     );
   }
-}
 
-class _Header extends StatelessWidget {
-  const _Header();
-
-  @override
-  Widget build(BuildContext context) {
+  static Widget _buildIcon(IconData icon, Color color) {
     return Center(
-      child: Column(
-        children: [
-          const SizedBox(height: 12),
-          Text("🎙️ EchoJar", style: Theme.of(context).textTheme.displaySmall),
-          Text("Send your voice to the future",
-              style: Theme.of(context).textTheme.titleMedium),
-          const SizedBox(height: 24),
-        ],
+      child: Icon(
+        icon,
+        size: 160,
+        color: color,
       ),
     );
   }
-}
 
-class _FieldTitle extends StatelessWidget {
-  final String title;
-  final bool isRequired;
-
-  const _FieldTitle(this.title, {this.isRequired = false});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: RichText(
-        text: TextSpan(
-          text: title,
-          style: Theme.of(context).textTheme.headlineSmall,
-          children: isRequired
-              ? [
-            const TextSpan(
-              text: ' *',
-              style: TextStyle(color: Colors.red),
-            )
-          ]
-              : [],
-        ),
+  static PageDecoration _pageDecoration() {
+    return const PageDecoration(
+      titleTextStyle: TextStyle(
+        fontSize: 28,
+        fontWeight: FontWeight.bold,
+        color: Colors.black87,
       ),
-    );
-  }
-}
-
-class _LanguageSelector extends StatelessWidget {
-  final String selected;
-  final void Function(String) onSelect;
-
-  const _LanguageSelector({
-    required this.selected,
-    required this.onSelect,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const _FieldTitle("Language"),
-      ],
+      bodyTextStyle: TextStyle(
+        fontSize: 18,
+        height: 1.5,
+        color: Colors.black54,
+      ),
+      bodyPadding: EdgeInsets.symmetric(horizontal: 20),
+      imagePadding: EdgeInsets.only(top: 40, bottom: 20),
     );
   }
 }

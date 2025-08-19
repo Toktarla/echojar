@@ -3,6 +3,7 @@ import 'package:echojar/app/database/src/storage/app_database.dart';
 import 'package:echojar/app/database/src/storage/schemes/jar.dart';
 import 'package:echojar/app/database/src/storage/schemes/memo.dart';
 import 'package:echojar/app/theme/app_colors.dart';
+import 'package:echojar/common/presentation/widgets/date_selector_bs.dart';
 import 'package:echojar/common/presentation/widgets/emoji_picker.dart';
 import 'package:echojar/common/presentation/widgets/error_dialog.dart';
 import 'package:echojar/common/presentation/widgets/jar_theme_tile.dart';
@@ -232,16 +233,13 @@ class _CreateJarScreenState extends State<CreateJarScreen> {
                               : '${_scheduledAt!.day}/${_scheduledAt!.month}/${_scheduledAt!.year}',
                           style: Theme.of(context).textTheme.titleMedium,
                         ),
-                        onPressed: () async {
-                          final now = DateTime.now();
-                          final picked = await showDatePicker(
-                            context: context,
-                            initialDate: now,
-                            firstDate: now,
-                            lastDate: now.add(const Duration(days: 365 * 5)),
+                        onPressed: () {
+                          DateSelectorBS.show(
+                            context,
+                            onDateSelected: (date) {
+                              setState(() => _scheduledAt = date);
+                            },
                           );
-                          if (picked != null)
-                            setState(() => _scheduledAt = picked);
                         },
                       ),
                       if (_scheduledAt != null) ...[
